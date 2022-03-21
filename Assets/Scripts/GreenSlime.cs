@@ -23,6 +23,7 @@ public class GreenSlime : MonoBehaviour
         Walk();
     }
 
+
     void Walk()
     {
         if (!IsWallFwd() && IsGroundFwd()) 
@@ -31,9 +32,14 @@ public class GreenSlime : MonoBehaviour
         }
         else 
         {
-            walkDir *= -1;
-            transform.localScale *= new Vector2(-1, 1);
+            Turn();
         }
+    }
+
+    public void Turn()
+    {
+        walkDir *= -1;
+        transform.localScale *= new Vector2(-1, 1);
     }
 
     /// <summary>
@@ -50,5 +56,16 @@ public class GreenSlime : MonoBehaviour
     bool IsGroundFwd()
     {
         return Physics2D.CapsuleCast(capsule.bounds.center, capsule.bounds.size, capsule.direction, 0, new Vector2(walkDir * 5, -1), 1f, collisionLayer).collider != null;
+    }
+
+
+    /// <summary>
+    /// Checks collisions with the player and destroys itself accordingly.
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Player")
+            if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f)
+                Destroy(this.gameObject);
     }
 }

@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float walkSpeed = 7;
-    [SerializeField] private float jumpSpeed = 7;
-    [SerializeField] private float jumpDuration  = 0.35f;
-    [SerializeField] private float fallAcceleration = 0.1f;
-    [SerializeField] private float maxFallSpeed = 5;
+    [SerializeField] private float Health            = 3;
+    [SerializeField] private float walkSpeed         = 7;
+    [SerializeField] private float jumpSpeed         = 7;
+    [SerializeField] private float fallAcceleration  = 0.1f;
+    [SerializeField] private float maxFallSpeed      = 5;
     [SerializeField] private LayerMask collisionLayer;
 
-    private bool  isGrounded = true;
-    private bool  isJumping  = false;
-    private float jumpTimeCounter = 0;
+    private bool     isGrounded    = true;
+    private Cooldown jumpTime      = new Cooldown(0.35f);
+    private Cooldown knockBackTime = new Cooldown(0.2f);
+
+    [HideInInspector] public  Vector2  knockBackDir  = new Vector2 (0, 0);
 
     private Rigidbody2D       rigidBody;
     private CapsuleCollider2D capsule;
@@ -24,6 +26,9 @@ public class PlayerController : MonoBehaviour
         capsule   = GetComponent<CapsuleCollider2D>();
         animator  = GetComponent<Animator>();
         rigidBody.isKinematic = false;
+
+        jumpTime.Counter = 0;
+        knockBackTime.Counter = 0;
     }
 
     void Update()
@@ -31,6 +36,7 @@ public class PlayerController : MonoBehaviour
         CheckGrounded();
         Walk();
         Jump();
+        KnockBack();
         Flip();
     }
     
@@ -50,40 +56,43 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Jump()
     {
+        animator.SetBool("IsJumping", !jumpTime.Update(Time.deltaTime));
+
         // Initiate jump from the ground.
         if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
         {
-            isJumping = true;
-            jumpTimeCounter = jumpDuration;
+            jumpTime.Reset();
         }
 
         // Continue jump in the air & end after duration.
         if (Input.GetKey(KeyCode.Space))
         {
-            if (jumpTimeCounter > 0 && isJumping)
+            if (!jumpTime.HasEnded())
             {
                 rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
-                jumpTimeCounter -= Time.deltaTime;
-            }
-            else 
-            {
-                isJumping = false;
             }
         }
 
         // End jump prematurely.
         if (Input.GetKeyUp(KeyCode.Space)) 
         {
-            isJumping = false;
+            jumpTime.Counter = 0;
         }
 
         // Fall down.
-        if (!isJumping && !isGrounded && rigidBody.velocity.y > -maxFallSpeed)
+        if (jumpTime.HasEnded() && !isGrounded && rigidBody.velocity.y > -maxFallSpeed)
         {
             rigidBody.velocity -= new Vector2(0, fallAcceleration);
         }
+    }
 
-        animator.SetBool("IsJumping", isJumping);
+    /// <summary>
+    /// Applies knockback to the player when the knockback cooldown is not finished.
+    /// </summary>
+    void KnockBack()
+    {
+        if (!knockBackTime.Update(Time.deltaTime))
+            rigidBody.velocity = knockBackDir * knockBackTime.CompletionRatio();
     }
     
 
@@ -102,9 +111,46 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void Flip()
     {
-        if (rigidBody.velocity.x < 0 && transform.localScale.x > 0)
-            transform.localScale *= new Vector2(-1, 1);
-        else if (rigidBody.velocity.x > 0 && transform.localScale.x < 0)
-            transform.localScale *= new Vector2(-1, 1);
+        if (knockBackTime.HasEnded())
+        {
+            if (rigidBody.velocity.x < 0 && transform.localScale.x > 0)
+                transform.localScale *= new Vector2(-1, 1);
+            else if (rigidBody.velocity.x > 0 && transform.localScale.x < 0)
+                transform.localScale *= new Vector2(-1, 1);
+        }
+    }
+
+
+    /// <summary>
+    /// Handle collisions with other entities.
+    /// </summary>
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        // Decrease hp when hit by an enemy.
+        if (other.gameObject.tag == "Enemy")
+        {
+            if (rigidBody.velocity.y > -1f) 
+            {
+                Health--;
+                knockBackTime.Reset();
+                knockBackDir = new Vector2((transform.position - other.gameObject.transform.position).normalized.x * 15, 5f);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks collisions with the enemies and jumps if an enemy was killed.
+    /// </summary>
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        // TODO: This isn't called since the enemy is destroyed.
+        if (other.gameObject.tag == "Player") 
+        {
+            if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f) 
+            {
+                knockBackTime.Reset();
+                knockBackDir = Vector2.up * 10;
+            }
+        }
     }
 }
