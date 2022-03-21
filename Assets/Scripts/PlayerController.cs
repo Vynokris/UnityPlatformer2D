@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     {
         CheckGrounded();
         Walk();
-        Jump();
+        UpdateJump();
         KnockBack();
         Flip();
     }
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     /// <summary>
     /// Listens to spacebar input and jumps accordingly.
     /// </summary>
-    void Jump()
+    void UpdateJump()
     {
         animator.SetBool("IsJumping", !jumpTime.Update(Time.deltaTime));
 
