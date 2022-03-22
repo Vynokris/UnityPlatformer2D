@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        
+        Application.targetFrameRate = 75;
     }
 
     void Update()

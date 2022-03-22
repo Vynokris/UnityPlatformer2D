@@ -7,8 +7,9 @@ public class OrangeSlime : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask collisionLayer;
 
-    private bool     isDead = false;
-    private float    walkDir = 0;
+    private bool     isDead    = false;
+    private float    walkDir   = 0;
+    private float    targetFPS = 75;
     private Vector3  originPosition;
     private Cooldown chaseCooldown = new Cooldown(2f);
 
@@ -44,7 +45,7 @@ public class OrangeSlime : MonoBehaviour
                 Vector2.Distance(transform.position, playerTransform.position) <= detectionRadius)
             {
                 walkDir = (playerTransform.position - transform.position).normalized.x;
-                rigidBody.velocity = new Vector2(walkDir * walkSpeed, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
                 transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
                 animator.SetBool("Chasing", true);
             }
@@ -53,7 +54,7 @@ public class OrangeSlime : MonoBehaviour
             else if (Vector2.Distance(originPosition, transform.position) >= 0.5f)
             {
                 walkDir = (originPosition - transform.position).normalized.x;
-                rigidBody.velocity = new Vector2(walkDir * walkSpeed, rigidBody.velocity.y);
+                rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
                 transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
                 animator.SetBool("Chasing", false);
             }

@@ -6,7 +6,8 @@ public class GreenSlime : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private LayerMask collisionLayer;
 
-    private bool              isDead = false;
+    private bool              isDead    = false;
+    private float             targetFPS = 75;
     private Rigidbody2D       rigidBody;
     private CapsuleCollider2D capsule;
 
@@ -29,7 +30,7 @@ public class GreenSlime : MonoBehaviour
     {
         if (!IsWallFwd() && IsGroundFwd()) 
         {
-            rigidBody.velocity = new Vector2(walkDir, rigidBody.velocity.y);
+            rigidBody.velocity = new Vector2(walkDir * Time.deltaTime * targetFPS, rigidBody.velocity.y);
         }
         else 
         {
