@@ -7,6 +7,7 @@ public class OrangeSlime : MonoBehaviour
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask collisionLayer;
 
+    private bool     isDead = false;
     private float    walkDir = 0;
     private Vector3  originPosition;
     private Cooldown chaseCooldown = new Cooldown(2f);
@@ -26,6 +27,8 @@ public class OrangeSlime : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+            Destroy(this.gameObject);
         Walk();
     }
 
@@ -95,6 +98,6 @@ public class OrangeSlime : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
             if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f)
-                Destroy(this.gameObject);
+                isDead = true;
     }
 }

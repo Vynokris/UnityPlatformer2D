@@ -91,8 +91,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     void KnockBack()
     {
+        if (knockBackTime.Counter == knockBackTime.Duration)
+            rigidBody.velocity = new Vector2(0, 0);
         if (!knockBackTime.Update(Time.deltaTime))
-            rigidBody.velocity = knockBackDir * knockBackTime.CompletionRatio();
+            rigidBody.velocity += knockBackDir * 0.02f *  knockBackTime.CompletionRatio();
     }
     
 
@@ -133,7 +135,10 @@ public class PlayerController : MonoBehaviour
             {
                 Health--;
                 knockBackTime.Reset();
-                knockBackDir = new Vector2((transform.position - other.gameObject.transform.position).normalized.x * 15, 5f);
+                if (transform.position.x > other.gameObject.transform.position.x)
+                    knockBackDir = new Vector2(800f, 5f);
+                else
+                    knockBackDir = new Vector2(-800f, 5f);
             }
         }
     }
@@ -144,12 +149,12 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         // TODO: This isn't called since the enemy is destroyed.
-        if (other.gameObject.tag == "Player") 
+        if (other.gameObject.tag == "Enemy") 
         {
-            if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f) 
+            if (rigidBody.velocity.y < -1f) 
             {
                 knockBackTime.Reset();
-                knockBackDir = Vector2.up * 10;
+                knockBackDir = Vector2.up * 12;
             }
         }
     }

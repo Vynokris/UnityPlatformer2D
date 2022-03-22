@@ -6,6 +6,7 @@ public class GreenSlime : MonoBehaviour
     [SerializeField] private float walkSpeed;
     [SerializeField] private LayerMask collisionLayer;
 
+    private bool              isDead = false;
     private Rigidbody2D       rigidBody;
     private CapsuleCollider2D capsule;
 
@@ -18,6 +19,8 @@ public class GreenSlime : MonoBehaviour
 
     void Update()
     {
+        if (isDead)
+            Destroy(this.gameObject);
         Walk();
     }
 
@@ -70,6 +73,6 @@ public class GreenSlime : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
             if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f)
-                Destroy(this.gameObject);
+                isDead = true;
     }
 }
