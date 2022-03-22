@@ -69,32 +69,29 @@ public class OrangeSlime : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Returns true if a wall is in front of the slime.
-    /// </summary>
+
+    /// <summary> Returns true if a wall is in front of the slime. </summary>
+    ///
     bool IsWallFwd()
     {
         return Physics2D.CapsuleCast(capsule.bounds.center + new Vector3(0, 0.1f, 0), capsule.bounds.size, capsule.direction, 0, new Vector2(walkDir, 0), 0.1f, collisionLayer).collider != null;
     }
 
-    /// <summary>
-    /// Returns true if there is ground in front of the slime.
-    /// </summary>
+    /// <summary> Returns true if there is ground in front of the slime. </summary>
     bool IsGroundFwd()
     {
         return Physics2D.CapsuleCast(capsule.bounds.center, capsule.bounds.size, capsule.direction, 0, new Vector2(walkDir * 5, -1), 1f, collisionLayer).collider != null;
     }
     
 
+    /// <summary> Checks collisions with other enemies and ignores them. </summary>
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.tag == "Enemy")
             Physics2D.IgnoreCollision(capsule, other.gameObject.GetComponent<CapsuleCollider2D>());
     }
 
-    /// <summary>
-    /// Checks collisions with the player and destroys itself accordingly.
-    /// </summary>
+    /// <summary> Checks collisions with the player's trigger and destroys itself accordingly. </summary>
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")

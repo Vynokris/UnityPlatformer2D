@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float Health            = 3;
     [SerializeField] private float walkSpeed         = 7;
     [SerializeField] private float jumpSpeed         = 7;
+    [SerializeField] private float jumpDuration      = 0.35f;
     [SerializeField] private float fallAcceleration  = 0.1f;
     [SerializeField] private float maxFallSpeed      = 5;
     [SerializeField] private LayerMask collisionLayer;
@@ -15,17 +16,20 @@ public class PlayerController : MonoBehaviour
     private Cooldown knockBackTime = new Cooldown(0.2f);
     private Vector2  knockBackDir  = new Vector2 (0, 0);
 
-    private Rigidbody2D       rigidBody;
-    private CapsuleCollider2D capsule;
-    private Animator          animator;
+    private Rigidbody2D   rigidBody;
+    private BoxCollider2D box;
+    private Animator      animator;
 
 
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        capsule   = GetComponent<CapsuleCollider2D>();
+        box   = GetComponent<BoxCollider2D>();
         animator  = GetComponent<Animator>();
         rigidBody.isKinematic = false;
+
+        if (jumpDuration > 0)
+            jumpTime.ChangeDuration(jumpDuration);
 
         jumpTime.Counter = 0;
         knockBackTime.Counter = 0;
@@ -98,7 +102,7 @@ public class PlayerController : MonoBehaviour
     /// <summary> Updates isGrounded variable by doing a box cast downwards. </summary>
     void CheckGrounded()
     {
-        isGrounded = Physics2D.CapsuleCast(capsule.bounds.center, capsule.bounds.size, capsule.direction, 0, Vector2.down, 0.1f, collisionLayer).collider != null;
+        isGrounded = Physics2D.BoxCast(box.bounds.center, box.bounds.size, 0, Vector2.down, 0.1f, collisionLayer).collider != null;
         animator.SetBool("IsGrounded", isGrounded);
     }
 
