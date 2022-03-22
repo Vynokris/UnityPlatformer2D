@@ -4,6 +4,7 @@ public class OrangeSlime : MonoBehaviour
 {
     [SerializeField] private float     walkSpeed;
     [SerializeField] private float     detectionRadius;
+    [SerializeField] private float     chaseCooldownTime = 2;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private LayerMask collisionLayer;
 
@@ -23,6 +24,9 @@ public class OrangeSlime : MonoBehaviour
         capsule   = GetComponent<CapsuleCollider2D>();
         animator  = GetComponent<Animator>();
         originPosition = transform.position;
+
+        if (chaseCooldownTime > 0)
+            chaseCooldown.ChangeDuration(chaseCooldownTime);
         chaseCooldown.Counter = 0;
     }
 
