@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     private Cooldown knockBackTime = new Cooldown(0.2f);
     private Vector2  knockBackDir  = new Vector2 (0, 0);
 
-    private Rigidbody2D   rigidBody;
+    [HideInInspector] public Rigidbody2D rigidBody { get; private set; }
     private BoxCollider2D box;
     private Animator      animator;
 
@@ -86,6 +86,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void StartKnockBack(Vector2 dir)
+    {
+        knockBackTime.Reset();
+        knockBackDir = dir;
+    }
+
     /// <summary> Applies knockback to the player when the knockback cooldown is not finished. </summary>
     void KnockBack()
     {
@@ -148,21 +154,6 @@ public class PlayerController : MonoBehaviour
             {
                 knockBackTime.Reset();
                 knockBackDir = Vector2.up * 10;
-            }
-        }
-
-        // Bounce on jump plants.
-        if (other.gameObject.tag == "JumpPlant")
-        {
-            if (rigidBody.velocity.y < -1f) 
-            {
-                knockBackTime.Reset();
-                knockBackDir = Vector2.up * 17;
-                /*
-                // Could be used if I wanted the jump plant to push in any direction.
-                knockBackDir = new Vector2(Mathf.Cos(other.gameObject.transform.rotation.z + 90), 
-                                           Mathf.Sin(other.gameObject.transform.rotation.z + 90)) * 17;
-                */
             }
         }
     }
