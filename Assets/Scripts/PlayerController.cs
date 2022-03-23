@@ -171,12 +171,15 @@ public class PlayerController : MonoBehaviour
             if (rigidBody.velocity.y > -1f) 
             {
                 Health--;
-                knockBackTime.Reset();
-                if (transform.position.x > other.gameObject.transform.position.x)
-                    knockBackDir = new Vector2( 80, 5);
-                else
-                    knockBackDir = new Vector2(-80, 5);
+                StartKnockBack(transform.position.x > other.gameObject.transform.position.x ? new Vector2(80, 5) : new Vector2(-80, 5));
             }
+        }
+
+        // Decrease hp when hitting a harmful decoration.
+        if (other.gameObject.layer == LayerMask.NameToLayer("Decorations"))
+        {
+            Health--;
+            StartKnockBack(transform.localScale.x < 0 ? new Vector2(80, 5) : new Vector2(-80, 5));
         }
     }
 
@@ -188,8 +191,7 @@ public class PlayerController : MonoBehaviour
         {
             if (rigidBody.velocity.y < -1f) 
             {
-                knockBackTime.Reset();
-                knockBackDir = Vector2.up * 10;
+                StartKnockBack(Vector2.up * 10);
             }
         }
     }
