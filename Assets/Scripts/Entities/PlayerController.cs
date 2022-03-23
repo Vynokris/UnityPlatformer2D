@@ -214,5 +214,17 @@ public class PlayerController : MonoBehaviour
                 StartKnockBack(Vector2.up * 10);
             }
         }
+
+        // Pick up health orbs.
+        if (other.gameObject.tag == "HealthOrb")
+        {
+            if (Health < 5) 
+            {
+                Health++;
+                
+                // Untag the health orb to never interact with it again.
+                other.gameObject.tag = "Untagged";
+            }
+        }
     }
 }
