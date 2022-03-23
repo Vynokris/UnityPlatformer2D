@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fallAcceleration   = 0.1f;
     [SerializeField] private float maxFallSpeed       = 5;
     [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private GameController gameController;
 
     private float    targetFPS      = 75;
     private bool     isGrounded     = true;
@@ -139,6 +141,16 @@ public class PlayerController : MonoBehaviour
         if (!knockBackTime.Update(Time.deltaTime))
             rigidBody.velocity += knockBackDir * 0.2f * Time.deltaTime * targetFPS *  knockBackTime.CompletionRatio();
     }
+
+    /// <summary> Decreases the player's health by the given amount. </summary>
+    void DecreaseHealth(int amount = 1)
+    {
+        Health -= amount;
+        if (Health <= 0 && gameController != null)
+        {
+            gameController.playerDied.Invoke();
+        }
+    }
     
 
     /// <summary> Updates isGrounded variable by doing a box cast downwards. </summary>
@@ -170,7 +182,7 @@ public class PlayerController : MonoBehaviour
         {
             if (rigidBody.velocity.y > -1f) 
             {
-                Health--;
+                DecreaseHealth();
                 StartKnockBack(transform.position.x > other.gameObject.transform.position.x ? new Vector2(80, 5) : new Vector2(-80, 5));
             }
         }
@@ -178,7 +190,7 @@ public class PlayerController : MonoBehaviour
         // Decrease hp when hitting a harmful decoration.
         if (other.gameObject.layer == LayerMask.NameToLayer("Decorations"))
         {
-            Health--;
+            DecreaseHealth();
             StartKnockBack(transform.localScale.x < 0 ? new Vector2(80, 5) : new Vector2(-80, 5));
         }
     }
