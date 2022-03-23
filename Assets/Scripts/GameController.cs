@@ -9,7 +9,7 @@ public class GameController : MonoBehaviour
 
     [HideInInspector] public UnityEvent playerDied;
     private bool     transitionOpening = true;
-    private float    transitionMaxScale = 12;
+    private float    transitionMaxScale = 14;
     private Animator transitionAnimator;
     private Cooldown transitionTimer = new Cooldown(1f);
 

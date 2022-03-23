@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -22,6 +21,8 @@ public class PlayerController : MonoBehaviour
     private Cooldown knockBackTime  = new Cooldown(0.2f);
     private Vector2  knockBackDir   = new Vector2 (0, 0);
 
+    [HideInInspector] public static Vector2 spawnPos = new Vector2(0, 0);
+
     [HideInInspector] public Rigidbody2D rigidBody { get; private set; }
     private BoxCollider2D box;
     private Animator      animator;
@@ -42,6 +43,10 @@ public class PlayerController : MonoBehaviour
         if (coyoteDuration > 0)
             coyoteTime.ChangeDuration(coyoteDuration);
 
+        // Move to the last checkpoint used.
+        if (spawnPos.x != 0 && spawnPos.y != 0)
+            transform.position = spawnPos;
+
         // End some cooldowns.
         jumpTime.Counter       = 0;
         jumpBufferTime.Counter = 0;
@@ -50,11 +55,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        CheckGrounded();
-        Walk();
-        UpdateJump();
-        KnockBack();
-        Flip();
+        if (Health > 0)
+        {
+            CheckGrounded();
+            Walk();
+            UpdateJump();
+            KnockBack();
+            Flip();
+        }
     }
     
 
@@ -146,7 +154,7 @@ public class PlayerController : MonoBehaviour
     void DecreaseHealth(int amount = 1)
     {
         Health -= amount;
-        if (Health <= 0 && gameController != null)
+        if (Health == 0 && gameController != null)
         {
             gameController.playerDied.Invoke();
         }
