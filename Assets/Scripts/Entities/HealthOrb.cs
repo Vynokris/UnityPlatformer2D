@@ -4,7 +4,7 @@ public class HealthOrb : MonoBehaviour
 {
     [SerializeField] private float pickUpDistance = 2f;
     [SerializeField] private float attractSpeed = 0.1f;
-    [SerializeField] private Transform playerTransform;
+    public Transform playerTransform;
 
     private Vector2 originPos;
     private float   movementAmplitude = 0.1f;

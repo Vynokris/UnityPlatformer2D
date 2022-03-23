@@ -3,8 +3,10 @@ using UnityEngine;
 public class GreenSlime : MonoBehaviour
 {
     [SerializeField][Range(-1, 1)] private int walkDir = -1;
-    [SerializeField] private float walkSpeed;
-    [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private float      walkSpeed;
+    [SerializeField] private Transform  playerTransform;
+    [SerializeField] private GameObject healthOrbPrefab;
+    [SerializeField] private LayerMask  collisionLayer;
 
     private bool              isDead    = false;
     private float             targetFPS = 75;
@@ -20,8 +22,15 @@ public class GreenSlime : MonoBehaviour
 
     void Update()
     {
-        if (isDead)
+        if (isDead) 
+        {
+            if (healthOrbPrefab != null && Random.Range(0, 10) < 3) 
+            {
+                GameObject newHealthOrb = Instantiate(healthOrbPrefab, transform.position, Quaternion.identity);
+                newHealthOrb.GetComponent<HealthOrb>().playerTransform = playerTransform;
+            }
             Destroy(this.gameObject);
+        }
         Walk();
     }
 

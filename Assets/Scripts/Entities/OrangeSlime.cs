@@ -2,11 +2,12 @@ using UnityEngine;
 
 public class OrangeSlime : MonoBehaviour
 {
-    [SerializeField] private float     walkSpeed;
-    [SerializeField] private float     detectionRadius;
-    [SerializeField] private float     chaseCooldownTime = 2;
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private LayerMask collisionLayer;
+    [SerializeField] private float      walkSpeed;
+    [SerializeField] private float      detectionRadius;
+    [SerializeField] private float      chaseCooldownTime = 2;
+    [SerializeField] private Transform  playerTransform;
+    [SerializeField] private GameObject healthOrbPrefab;
+    [SerializeField] private LayerMask  collisionLayer;
 
     private bool     isDead    = false;
     private float    walkDir   = 0;
@@ -33,7 +34,14 @@ public class OrangeSlime : MonoBehaviour
     void Update()
     {
         if (isDead)
+        {
+            if (healthOrbPrefab != null) 
+            {
+                GameObject newHealthOrb = Instantiate(healthOrbPrefab, transform.position, Quaternion.identity);
+                newHealthOrb.GetComponent<HealthOrb>().playerTransform = playerTransform;
+            }
             Destroy(this.gameObject);
+        }
         Walk();
     }
 
