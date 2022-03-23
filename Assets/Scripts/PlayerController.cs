@@ -2,19 +2,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float Health            = 3;
-    [SerializeField] private float walkSpeed         = 7;
-    [SerializeField] private float jumpSpeed         = 7;
-    [SerializeField] private float jumpDuration      = 0.35f;
-    [SerializeField] private float fallAcceleration  = 0.1f;
-    [SerializeField] private float maxFallSpeed      = 5;
+    [SerializeField] private float Health             = 3;
+    [SerializeField] private float walkSpeed          = 7;
+    [SerializeField] private float jumpSpeed          = 7;
+    [SerializeField] private float jumpDuration       = 0.35f;
+    [SerializeField] private float jumpBufferDuration = 0.1f;
+    [SerializeField] private float coyoteDuration     = 0.15f;
+    [SerializeField] private float fallAcceleration   = 0.1f;
+    [SerializeField] private float maxFallSpeed       = 5;
     [SerializeField] private LayerMask collisionLayer;
 
-    private float    targetFPS     = 75;
-    private bool     isGrounded    = true;
-    private Cooldown jumpTime      = new Cooldown(0.35f);
-    private Cooldown knockBackTime = new Cooldown(0.2f);
-    private Vector2  knockBackDir  = new Vector2 (0, 0);
+    private float    targetFPS      = 75;
+    private bool     isGrounded     = true;
+    private Cooldown jumpTime       = new Cooldown(0.35f);
+    private Cooldown jumpBufferTime = new Cooldown(0.1f);
+    private Cooldown coyoteTime     = new Cooldown(0.15f);
+    private Cooldown knockBackTime  = new Cooldown(0.2f);
+    private Vector2  knockBackDir   = new Vector2 (0, 0);
 
     [HideInInspector] public Rigidbody2D rigidBody { get; private set; }
     private BoxCollider2D box;
@@ -24,15 +28,22 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
-        box   = GetComponent<BoxCollider2D>();
+        box       = GetComponents<BoxCollider2D>()[1];
         animator  = GetComponent<Animator>();
         rigidBody.isKinematic = false;
 
+        // Update cooldowns according to inspector values.
         if (jumpDuration > 0)
             jumpTime.ChangeDuration(jumpDuration);
+        if (jumpBufferDuration > 0)
+            jumpBufferTime.ChangeDuration(jumpBufferDuration);
+        if (coyoteDuration > 0)
+            coyoteTime.ChangeDuration(coyoteDuration);
 
-        jumpTime.Counter = 0;
-        knockBackTime.Counter = 0;
+        // End some cooldowns.
+        jumpTime.Counter       = 0;
+        jumpBufferTime.Counter = 0;
+        knockBackTime.Counter  = 0;
     }
 
     void Update()
@@ -64,6 +75,24 @@ public class PlayerController : MonoBehaviour
             jumpTime.Reset();
         }
 
+        // Buffer a jump while in the air.
+        if (!isGrounded && Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpBufferTime.Reset();
+        }
+
+        // Initiate jump using the jump buffer.
+        if (!jumpBufferTime.Update(Time.deltaTime) && isGrounded)
+        {
+            jumpTime.Reset();
+        }
+
+        // Initiate jump using coyote time.
+        if (!isGrounded && !coyoteTime.Update(Time.deltaTime) && Input.GetKeyDown(KeyCode.Space))
+        {
+            jumpTime.Reset();
+        }
+
         // Continue jump in the air & end after duration.
         if (Input.GetKey(KeyCode.Space))
         {
@@ -84,11 +113,18 @@ public class PlayerController : MonoBehaviour
         {
             rigidBody.velocity -= new Vector2(0, fallAcceleration * Time.deltaTime * targetFPS);
         }
+
+        // Reset coyote time counter.
+        if (isGrounded && !coyoteTime.FirstFrame(Time.deltaTime))
+        {
+            coyoteTime.Reset();
+        }
     }
 
-    public void StartKnockBack(Vector2 dir)
+    /// <summary> Initiates a knockback in the given direction for the given duration. </summary>
+    public void StartKnockBack(Vector2 dir, float duration = 0.2f)
     {
-        knockBackTime.Reset();
+        knockBackTime.ChangeDuration(duration);
         knockBackDir = dir;
     }
 
