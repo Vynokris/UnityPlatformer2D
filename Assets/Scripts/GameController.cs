@@ -7,16 +7,24 @@ public class GameController : MonoBehaviour
     [SerializeField] private float      transitionDuration = 1f;
     [SerializeField] private GameObject galaxyTransition;
 
+    [HideInInspector] public UnityEvent playerHealed;
+    [HideInInspector] public UnityEvent playerDamaged;
     [HideInInspector] public UnityEvent playerDied;
+    [HideInInspector] public UnityEvent showGameOver;
+
     private bool     transitionOpening = true;
     private float    transitionMaxScale = 14;
     private Animator transitionAnimator;
-    private Cooldown transitionTimer = new Cooldown(1f);
+    public  Cooldown transitionTimer { get; private set; } = new Cooldown(1f);
 
     void Start()
     {
-        if (playerDied == null) playerDied = new UnityEvent();
-        playerDied.AddListener(ReloadScene);
+        if (playerHealed  == null) playerHealed  = new UnityEvent();
+        if (playerDamaged == null) playerDamaged = new UnityEvent();
+        if (playerDied    == null) playerDied    = new UnityEvent();
+        if (showGameOver  == null) showGameOver  = new UnityEvent();
+
+        playerDied.AddListener(StartTransition);
 
         if (galaxyTransition != null) transitionAnimator = galaxyTransition.GetComponent<Animator>();
         if (transitionDuration > 0)   transitionTimer.ChangeDuration(transitionDuration);
@@ -30,9 +38,8 @@ public class GameController : MonoBehaviour
         {
             if (!transitionOpening)
             {
-                transitionTimer.Reset();
-                transitionOpening = true;
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                if (Input.GetKeyDown(KeyCode.Space))
+                    ReloadScene();
             }
             else
             {
@@ -51,9 +58,15 @@ public class GameController : MonoBehaviour
     }
 
     // Reload the game scene.
-    void ReloadScene()
+    void StartTransition()
     {
         transitionOpening = false;
         transitionTimer.Reset();
+    }
+
+    // Reload the game scene.
+    void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

@@ -22,7 +22,8 @@ public class HealthOrb : MonoBehaviour
 
     void Move()
     {
-        transform.position = new Vector2(originPos.x + Mathf.Cos(Time.time) * movementAmplitude, originPos.y + Mathf.Sin(Time.time) * movementAmplitude);
+        transform.position = new Vector2(originPos.x + Mathf.Cos(Time.time) * movementAmplitude, 
+                                         originPos.y + Mathf.Sin(Time.time) * movementAmplitude);
     }
 
     void GoToPlayer()

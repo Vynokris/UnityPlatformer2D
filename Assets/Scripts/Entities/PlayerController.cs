@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private float Health             = 3;
+    [SerializeField] public float Health { get; private set; } = 5;
+
     [SerializeField] private float walkSpeed          = 7;
     [SerializeField] private float jumpSpeed          = 7;
     [SerializeField] private float jumpDuration       = 0.35f;
@@ -154,6 +155,7 @@ public class PlayerController : MonoBehaviour
     void DecreaseHealth(int amount = 1)
     {
         Health -= amount;
+        gameController.playerDamaged.Invoke();
         if (Health == 0 && gameController != null)
         {
             gameController.playerDied.Invoke();
@@ -221,6 +223,7 @@ public class PlayerController : MonoBehaviour
             if (Health < 5) 
             {
                 Health++;
+                gameController.playerHealed.Invoke();
                 
                 // Untag the health orb to never interact with it again.
                 other.gameObject.tag = "Untagged";
