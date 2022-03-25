@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] public float Health { get; private set; } = 5;
+    public float Health { get; private set; } = 5;
 
     [SerializeField] private float walkSpeed          = 7;
     [SerializeField] private float jumpSpeed          = 7;

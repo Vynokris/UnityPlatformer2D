@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,55 +9,155 @@ public class HealthController : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private GameObject       hudHealthPrefab;
 
-    private List<GameObject> healthPoints  = new List<GameObject>();
+    private List<GameObject> healthPoints = new List<GameObject>();
 
+    public  int currentHP { get; private set; } = -1;
     private Cooldown hpSpawnTimer = new Cooldown(0.5f);
-    public  int        spawningHp = 0;
 
     void Start()
     {
         if (hpSpawnDuration >= 0)
             hpSpawnTimer.ChangeDuration(hpSpawnDuration);
 
-        for (int i = 0; i < playerController.Health; i++)
-            AddHp();
+        gameController.playerDamaged.AddListener(OnPlayerDamaged);
+        gameController.playerHealed .AddListener(OnPlayerHealed);
+        gameController.reloadScene  .AddListener(OnReloadScene);
 
-        gameController.playerDamaged.AddListener(RemoveHp);
-        gameController.playerHealed .AddListener(AddHp);
+        StartCoroutine(AddAllHP());
     }
 
     void Update()
     {
-        if (gameController.transitionTimer.HasEnded())
+    }
+    
+    IEnumerator AddHP()
+    {
+        while (true)
         {
-            if (spawningHp < healthPoints.Count)
+            // Add a new health point.
+            if (hpSpawnTimer.Counter == hpSpawnTimer.Duration)
             {
-                if (!hpSpawnTimer.Update(Time.deltaTime))
-                {
-                    healthPoints[spawningHp].transform.localScale = new Vector3(1 - hpSpawnTimer.CompletionRatio(), 
-                                                                                1 - hpSpawnTimer.CompletionRatio(), 1);
-                }
-                else
-                {
-                    hpSpawnTimer.Reset();
-                    spawningHp++;
-                }
+                GameObject newHp = Instantiate(hudHealthPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
+                newHp.GetComponent<HudHealthPoint>().SetIndex(healthPoints.Count);
+                newHp.transform.localScale = new Vector3(0, 0, 1);
+                healthPoints.Add(newHp);
+                currentHP++;
             }
+
+            hpSpawnTimer.Update(Time.deltaTime);
+
+            // Update the current health point's scale.
+            if (!hpSpawnTimer.HasEnded())
+            {
+                float ratio = 1 - hpSpawnTimer.CompletionRatio();
+                healthPoints[currentHP].transform.localScale = new Vector3(ratio, ratio, 1);
+            }
+
+            // When the timer ends, reset it and end the coroutine.
+            else
+            {
+                hpSpawnTimer.Reset();
+                break;
+            }
+
+            yield return null;
         }
+
+        StopCoroutine(AddHP());
     }
 
-    void RemoveHp()
+    IEnumerator AddAllHP()
     {
-        spawningHp--;
-        Destroy(healthPoints[healthPoints.Count-1]);
-        healthPoints.Remove(healthPoints[healthPoints.Count-1]);
+        // Wait until the scene opening transition hase ended.
+        while (!gameController.transitionTimer.HasEnded())
+            yield return null;
+
+        // Spawn all of the player's health points.
+        for (int i = 0; i < playerController.Health; i++)
+        {
+            // Wait until it's the first frame of the spawn timer.
+            while (!(hpSpawnTimer.Counter == hpSpawnTimer.Duration))
+            {
+                yield return null;
+            }
+
+            // Add a new health point.
+            StartCoroutine(AddHP());
+            yield return null;
+        }
+
+        StopCoroutine(AddAllHP());
     }
 
-    void AddHp()
+    IEnumerator DelHP()
     {
-        GameObject newHp = Instantiate(hudHealthPrefab, new Vector3(0, 0, 0), Quaternion.identity, transform);
-        newHp.GetComponent<HudHealthPoint>().SetIndex(healthPoints.Count);
-        newHp.transform.localScale = new Vector3(0, 0, 1);
-        healthPoints.Add(newHp);
+        while (currentHP >= 0)
+        {
+            // Update the current health point's scale.
+            if (!hpSpawnTimer.Update(Time.deltaTime))
+            {
+                float ratio = hpSpawnTimer.CompletionRatio();
+                healthPoints[currentHP].transform.localScale = new Vector3(ratio, ratio, 1);
+            }
+
+            // When the timer ends, reset it and destroy the current hp.
+            else
+            {
+                currentHP--;
+                hpSpawnTimer.Reset();
+                Destroy(healthPoints[healthPoints.Count-1]);
+                healthPoints.Remove(healthPoints[healthPoints.Count-1]);
+                break;
+            }
+
+            yield return null;
+        }
+
+        StopCoroutine(DelHP());
+    }
+
+    IEnumerator DelAllHP()
+    {
+        while (true)
+        {
+            // Update all of the health points' scales.
+            if (!hpSpawnTimer.Update(Time.deltaTime))
+            {
+                float ratio = hpSpawnTimer.CompletionRatio();
+                foreach (GameObject healthPoint in healthPoints)
+                    healthPoint.transform.localScale = new Vector3(ratio, ratio, 1);
+            }
+
+            // When the timer ends, reset it and destroy all the health points.
+            else
+            {
+                hpSpawnTimer.Reset();
+                for (int i = healthPoints.Count; i > 0; i--)
+                {
+                    Destroy(healthPoints[healthPoints.Count-1]);
+                    healthPoints.Remove(healthPoints[healthPoints.Count-1]);
+                }
+                break;
+            }
+
+            yield return null;
+        }
+
+        StopCoroutine(DelAllHP());
+    }
+
+    void OnPlayerDamaged()
+    {
+        StartCoroutine(DelHP());
+    }
+
+    void OnPlayerHealed()
+    {
+        StartCoroutine(AddHP());
+    }
+
+    void OnReloadScene()
+    {
+        StartCoroutine(DelAllHP());
     }
 }
