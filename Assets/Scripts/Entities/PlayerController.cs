@@ -45,6 +45,8 @@ public class PlayerController : MonoBehaviour
             jumpBufferTime.ChangeDuration(jumpBufferDuration);
         if (coyoteDuration > 0)
             coyoteTime.ChangeDuration(coyoteDuration);
+        if (invincibilityDuration > 0)
+            invincibilityTime.ChangeDuration(invincibilityDuration);
 
         // Move to the last checkpoint used.
         if (spawnPos.x != 0 && spawnPos.y != 0)

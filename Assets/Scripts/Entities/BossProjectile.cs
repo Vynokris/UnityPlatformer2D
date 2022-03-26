@@ -79,7 +79,7 @@ public class BossProjectile : MonoBehaviour
         {
             hasHitWall = true;
             if (!falling)
-                Destroy(this.capsule);
+                Destroy(this.capsule);  
         }
     }
 }

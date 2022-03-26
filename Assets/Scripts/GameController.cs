@@ -71,6 +71,12 @@ public class GameController : MonoBehaviour
             promptRestart = false;
             reloadScene.Invoke();
         }
+
+        // If the user pressed Esc, quit the game.
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     // Start the scene closing transition.
