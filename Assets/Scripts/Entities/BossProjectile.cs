@@ -7,6 +7,8 @@ public class BossProjectile : MonoBehaviour
     [SerializeField] private float speed = 1f;
     [SerializeField] private float timeToDespawn = 3f;
 
+    private bool     hasHitWall   = false;
+    private bool     falling      = false;
     private Cooldown despawnTimer = new Cooldown();
 
     private Rigidbody2D       rigidBody;
@@ -18,24 +20,33 @@ public class BossProjectile : MonoBehaviour
         if (timeToDespawn >= 0)
             despawnTimer.ChangeDuration(timeToDespawn);
 
-        rigidBody = GetComponent<Rigidbody2D>();
-        capsule   = GetComponent<CapsuleCollider2D>();
-        renderer  = GetComponent<Renderer>();
+        rigidBody  = GetComponent<Rigidbody2D>();
+        capsule    = GetComponent<CapsuleCollider2D>();
+        renderer   = GetComponent<Renderer>();
     }
 
     void Update()
     {
         Move();
-        
-        despawnTimer.Update(Time.deltaTime);
-        renderer.material.SetColor("_Color", new Color(1, 1, 1, despawnTimer.CompletionRatio()));
-        if (despawnTimer.HasEnded())
-            Destroy(this.gameObject);
+        Fade();
     }
 
     void Move()
     {
-        rigidBody.velocity = new Vector2(speed, 0);
+        if (falling)
+            rigidBody.velocity = new Vector2(0, -2);
+        else if (hasHitWall)
+            rigidBody.velocity = new Vector2(0, 0);
+        else
+            rigidBody.velocity = new Vector2(speed, 0);
+    }
+
+    void Fade()
+    {
+        despawnTimer.Update(Time.deltaTime);
+        renderer.material.SetColor("_Color", new Color(1, 1, 1, despawnTimer.CompletionRatio()));
+        if (despawnTimer.HasEnded())
+            Destroy(this.gameObject);
     }
 
     public void SetDir(float dir)
@@ -45,10 +56,30 @@ public class BossProjectile : MonoBehaviour
     }
 
 
-    /// <summary> Checks collisions with other enemies and ignores them. </summary>
+    /// <summary> Checks collisions and behaves accordingly. </summary>
     void OnCollisionEnter2D(Collision2D other)
     {
+        // Ignore collisions with other enemies.
         if (other.gameObject.tag == "Enemy")
+        {
             Physics2D.IgnoreCollision(capsule, other.gameObject.GetComponent<CapsuleCollider2D>());
+        }
+
+        // Fall when the player is hit, and ignore collisions with him.
+        if (other.gameObject.tag == "Player")
+        {
+            falling = true;
+            Physics2D.IgnoreCollision(capsule, other.gameObject.GetComponents<BoxCollider2D>()[0]);
+            Physics2D.IgnoreCollision(capsule, other.gameObject.GetComponents<BoxCollider2D>()[1]);
+        }
+
+        // Stop when a wall is hit.
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            other.gameObject.layer == LayerMask.NameToLayer("Decorations"))
+        {
+            hasHitWall = true;
+            if (!falling)
+                Destroy(this.capsule);
+        }
     }
 }

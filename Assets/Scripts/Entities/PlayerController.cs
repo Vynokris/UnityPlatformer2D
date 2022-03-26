@@ -197,6 +197,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Decrease hp when hit by a projectile.
+        if (other.gameObject.tag == "Projectile")
+        {
+            DecreaseHealth();
+            StartKnockBack(new Vector2(other.gameObject.transform.localScale.x * 80, 5));
+        }
+
         // Decrease hp when hitting a harmful decoration.
         if (other.gameObject.layer == LayerMask.NameToLayer("Decorations"))
         {
