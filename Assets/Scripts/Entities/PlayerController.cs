@@ -4,23 +4,25 @@ public class PlayerController : MonoBehaviour
 {
     public float Health { get; private set; } = 5;
 
-    [SerializeField] private float walkSpeed          = 7;
-    [SerializeField] private float jumpSpeed          = 7;
-    [SerializeField] private float jumpDuration       = 0.35f;
-    [SerializeField] private float jumpBufferDuration = 0.1f;
-    [SerializeField] private float coyoteDuration     = 0.15f;
-    [SerializeField] private float fallAcceleration   = 0.1f;
-    [SerializeField] private float maxFallSpeed       = 5;
+    [SerializeField] private float walkSpeed             = 7;
+    [SerializeField] private float jumpSpeed             = 7;
+    [SerializeField] private float jumpDuration          = 0.35f;
+    [SerializeField] private float jumpBufferDuration    = 0.1f;
+    [SerializeField] private float coyoteDuration        = 0.15f;
+    [SerializeField] private float fallAcceleration      = 0.1f;
+    [SerializeField] private float maxFallSpeed          = 5;
+    [SerializeField] private float invincibilityDuration = 0.5f;
     [SerializeField] private LayerMask collisionLayer;
     [SerializeField] private GameController gameController;
 
-    private float    targetFPS      = 75;
-    private bool     isGrounded     = true;
-    private Cooldown jumpTime       = new Cooldown(0.35f);
-    private Cooldown jumpBufferTime = new Cooldown(0.1f);
-    private Cooldown coyoteTime     = new Cooldown(0.15f);
-    private Cooldown knockBackTime  = new Cooldown(0.2f);
-    private Vector2  knockBackDir   = new Vector2 (0, 0);
+    private float    targetFPS         = 75;
+    private bool     isGrounded        = true;
+    private Cooldown jumpTime          = new Cooldown(0.35f);
+    private Cooldown jumpBufferTime    = new Cooldown(0.1f);
+    private Cooldown coyoteTime        = new Cooldown(0.15f);
+    private Cooldown invincibilityTime = new Cooldown(0.5f);
+    private Cooldown knockBackTime     = new Cooldown(0.2f);
+    private Vector2  knockBackDir      = new Vector2 (0, 0);
 
     [HideInInspector] public static Vector2 spawnPos = new Vector2(0, 0);
 
@@ -58,6 +60,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Health > 0)
         {
+            invincibilityTime.Update(Time.deltaTime);
             CheckGrounded();
             Walk();
             UpdateJump();
@@ -154,11 +157,15 @@ public class PlayerController : MonoBehaviour
     /// <summary> Decreases the player's health by the given amount. </summary>
     void DecreaseHealth(int amount = 1)
     {
-        Health -= amount;
-        gameController.playerDamaged.Invoke();
-        if (Health == 0 && gameController != null)
+        if (invincibilityTime.HasEnded())
         {
-            gameController.playerDied.Invoke();
+            invincibilityTime.Reset();
+            Health -= amount;
+            gameController.playerDamaged.Invoke();
+            if (Health == 0 && gameController != null)
+            {
+                gameController.playerDied.Invoke();
+            }
         }
     }
     

@@ -30,7 +30,7 @@ public class Boss : MonoBehaviour
     {
         rigidBody.velocity = new Vector2(0, 0);
         if (health <= 0)
-            Destroy(this.gameObject);
+            animator.SetBool("Dead", true);
 
         Flip();
         Shoot();

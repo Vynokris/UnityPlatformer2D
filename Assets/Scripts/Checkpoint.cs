@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
+    [SerializeField] private bool playerStartsHere = false;
     private Animator animator;
 
     void Start()
     {
+        if (playerStartsHere && PlayerController.spawnPos == new Vector2(0, 0))
+            PlayerController.spawnPos = transform.position;
+
         animator = GetComponent<Animator>();
     }
 

@@ -50,34 +50,34 @@ public class OrangeSlime : MonoBehaviour
     {
         chaseCooldown.Update(Time.deltaTime);
 
-        if (!IsWallFwd() && IsGroundFwd()) 
+        
+        // Chase the player.
+        if (!IsWallFwd() && IsGroundFwd() &&
+            chaseCooldown.HasEnded() &&
+            Vector2.Distance(transform.position, playerTransform.position) <= detectionRadius) 
         {
-            // Chase the player.
-            if (chaseCooldown.HasEnded() &&
-                Vector2.Distance(transform.position, playerTransform.position) <= detectionRadius)
-            {
-                walkDir = (playerTransform.position - transform.position).normalized.x;
-                rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
-                transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
-                animator.SetBool("Chasing", true);
-            }
+            walkDir = (playerTransform.position - transform.position).normalized.x;
+            rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
+            transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
+            animator.SetBool("Chasing", true);
+        }
 
-            // Go back to the origin point.
-            else if (Vector2.Distance(originPosition, transform.position) >= 0.5f)
-            {
-                walkDir = (originPosition - transform.position).normalized.x;
-                rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
-                transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
-                animator.SetBool("Chasing", false);
-            }
+        // Go back to the origin point.
+        else if (Vector2.Distance(originPosition, transform.position) >= 0.4f)
+        {
+            chaseCooldown.Reset();
+            walkDir = (originPosition - transform.position).normalized.x;
+            rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);
+            transform.localScale = new Vector2(rigidBody.velocity.normalized.x, 1);
+            animator.SetBool("Chasing", false);
+        }
 
-            // Don't move.
-            else
-            {
-                walkDir = 0;
-                rigidBody.velocity = new Vector2(0, 0);
-                animator.SetBool("Chasing", false);
-            }
+        // Don't move.
+        else
+        {
+            walkDir = 0;
+            rigidBody.velocity = new Vector2(0, 0);
+            animator.SetBool("Chasing", false);
         }
     }
 
