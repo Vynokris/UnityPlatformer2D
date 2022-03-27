@@ -68,11 +68,7 @@ public class GameController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && transitionTimer.HasEnded())
         {
             if (isGameFinished)
-            {
-                PlayerController.spawnPos = new Vector2(0, 0);
-                gameTimer = 0f;
-                respawnCount = 0;
-            }
+                ResetGame();
             StartTransition();
             reloadScene.Invoke();
         }
@@ -102,5 +98,13 @@ public class GameController : MonoBehaviour
     void OnGameEnd()
     {
         isGameFinished = true;
+    }
+
+    /// <summary> Resets the game counters and player spawn position. </summary>
+    void ResetGame()
+    {
+        PlayerController.spawnPos = new Vector2(0, 0);
+        gameTimer = 0f;
+        respawnCount = 0;
     }
 }
