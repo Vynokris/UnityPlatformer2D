@@ -7,6 +7,7 @@ public class Boss : MonoBehaviour
     [SerializeField] private int   health           = 5;
     [SerializeField] private float minShootCooldown = 1f;
     [SerializeField] private float maxShootCooldown = 2f;
+    [SerializeField] private bool  flipToFacePlayer = true;
 
     [SerializeField] private Transform       playerTransform;
     [SerializeField] private GameObject      bossProjectilePrefab;
@@ -106,12 +107,15 @@ public class Boss : MonoBehaviour
     /// <summary> Flips the boss so that it always faces towards the player. </summary>
     void Flip()
     {
-        float distToPlayer = playerTransform.position.x - transform.position.x;
-
-        if (distToPlayer < 0 && transform.localScale.x > 0 ||
-            distToPlayer > 0 && transform.localScale.x < 0)
+        if (flipToFacePlayer)
         {
-            transform.localScale *= new Vector2(-1, 1);
+            float distToPlayer = playerTransform.position.x - transform.position.x;
+
+            if (distToPlayer < 0 && transform.localScale.x > 0 ||
+                distToPlayer > 0 && transform.localScale.x < 0)
+            {
+                transform.localScale *= new Vector2(-1, 1);
+            }
         }
     }
 

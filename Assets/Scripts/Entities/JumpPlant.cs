@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class JumpPlant : MonoBehaviour
 {
-    [SerializeField] private float boopForce = 17;
+    [SerializeField] private float boopForce = 18;
     [SerializeField] private float boopCooldownTime = 0.5f;
     [SerializeField] private AudioController audioController;
 
