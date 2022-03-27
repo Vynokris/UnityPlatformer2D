@@ -36,6 +36,8 @@ public class GameController : MonoBehaviour
 
         if (galaxyTransition != null) transitionAnimator = galaxyTransition.GetComponent<Animator>();
         if (transitionDuration > 0)   transitionTimer.ChangeDuration(transitionDuration);
+
+        Cursor.visible = false;
     }
 
     void Update()

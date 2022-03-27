@@ -7,9 +7,11 @@ public class Boss : MonoBehaviour
     [SerializeField] private int   health           = 5;
     [SerializeField] private float minShootCooldown = 1f;
     [SerializeField] private float maxShootCooldown = 2f;
-    [SerializeField] private Transform playerTransform;
-    [SerializeField] private GameObject bossProjectilePrefab;
-    [SerializeField] private GameController gameController;
+
+    [SerializeField] private Transform       playerTransform;
+    [SerializeField] private GameObject      bossProjectilePrefab;
+    [SerializeField] private GameController  gameController;
+    [SerializeField] private AudioController audioController;
 
     private float    targetFPS     = 75;
     private Cooldown shootCooldown = new Cooldown(1f);
@@ -44,17 +46,20 @@ public class Boss : MonoBehaviour
     /// <summary> Makes the boss shoot at random intervals. </summary>
     void Shoot()
     {
-        if (shootCooldown.Counter == shootCooldown.Duration)
+        if (Mathf.Abs(playerTransform.position.y - transform.position.y) < 5f)
         {
-            animator.SetBool("Shooting", false);
-        }
+            if (shootCooldown.Counter == shootCooldown.Duration)
+            {
+                animator.SetBool("Shooting", false);
+            }
 
-        shootCooldown.Update(Time.deltaTime);
-        
-        if (shootCooldown.HasEnded())
-        {
-            shootCooldown.ChangeDuration(Random.Range(minShootCooldown, maxShootCooldown));
-            animator.SetBool("Shooting", true);
+            shootCooldown.Update(Time.deltaTime);
+            
+            if (shootCooldown.HasEnded())
+            {
+                shootCooldown.ChangeDuration(Random.Range(minShootCooldown, maxShootCooldown));
+                animator.SetBool("Shooting", true);
+            }
         }
     }
 
@@ -132,5 +137,24 @@ public class Boss : MonoBehaviour
                 StartKnockBack(new Vector2(-transform.localScale.x * 100, 0), 0.4f);
             }
         }
+    }
+
+
+    /// <summary> Plays a bow pulling sound. </summary>
+    void PlayBowSound()
+    {
+        audioController.Play("BowPull", 0.5f);
+    }
+
+    /// <summary> Plays a bow shooting sound. </summary>
+    void PlayShootSound()
+    {
+        audioController.Play("BowShoot", 0.5f);
+    }
+
+    /// <summary> Plays the sound of the boss falling dead. </summary>
+    void PlayDeathSound()
+    {
+        audioController.Play("BossDeath");
     }
 }

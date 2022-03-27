@@ -11,3 +11,4 @@
 *.mat filter=lfs diff=lfs merge=lfs -text
 *.shader filter=lfs diff=lfs merge=lfs -text
 *.cginc filter=lfs diff=lfs merge=lfs -text
+*.ogg filter=lfs diff=lfs merge=lfs -text

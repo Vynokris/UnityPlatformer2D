@@ -4,12 +4,12 @@ public class JumpPlant : MonoBehaviour
 {
     [SerializeField] private float boopForce = 17;
     [SerializeField] private float boopCooldownTime = 0.5f;
+    [SerializeField] private AudioController audioController;
 
     private bool     boopedPlayer = false;
     private Cooldown boopCooldown = new Cooldown(0.5f);
     private Animator animator;
 
-    // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -17,7 +17,6 @@ public class JumpPlant : MonoBehaviour
             boopCooldown.ChangeDuration(boopCooldownTime);
     }
 
-    // Update is called once per frame
     void Update()
     {
         boopCooldown.Update(Time.deltaTime);
@@ -30,9 +29,8 @@ public class JumpPlant : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Checks collisions with the enemies and jumps if an enemy was killed.
-    /// </summary>
+
+    /// <summary> Checks collisions with the enemies and jumps if an enemy was killed. </summary>
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Player")
@@ -45,8 +43,16 @@ public class JumpPlant : MonoBehaviour
                 boopCooldown.Reset();
                 boopedPlayer = true;
                 animator.SetBool("BoopedPlayer", boopedPlayer);
+                PlayBounceSound();
                 player.StartKnockBack(Vector2.up * boopForce);
             }
         }
+    }
+
+
+    /// <summary> Plays a bouncing sound. </summary>
+    void PlayBounceSound()
+    {
+        audioController.Play("Bounce", 0.5f);
     }
 }

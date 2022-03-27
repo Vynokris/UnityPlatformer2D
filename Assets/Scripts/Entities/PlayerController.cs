@@ -12,8 +12,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fallAcceleration      = 0.1f;
     [SerializeField] private float maxFallSpeed          = 5;
     [SerializeField] private float invincibilityDuration = 0.5f;
-    [SerializeField] private LayerMask collisionLayer;
-    [SerializeField] private GameController gameController;
+    [SerializeField] private LayerMask       collisionLayer;
+    [SerializeField] private GameController  gameController;
+    [SerializeField] private AudioController audioController;
 
     private float    targetFPS         = 75;
     private bool     isGrounded        = true;
@@ -161,6 +162,7 @@ public class PlayerController : MonoBehaviour
     {
         if (invincibilityTime.HasEnded())
         {
+            PlayDamageSound();
             invincibilityTime.Reset();
             Health -= amount;
             gameController.playerDamaged.Invoke();
@@ -229,6 +231,7 @@ public class PlayerController : MonoBehaviour
         {
             if (rigidBody.velocity.y < -1f) 
             {
+                PlayEnemyDamageSound();
                 StartKnockBack(Vector2.up * 10);
             }
         }
@@ -236,6 +239,7 @@ public class PlayerController : MonoBehaviour
         // Pick up health orbs.
         if (other.gameObject.tag == "HealthOrb")
         {
+            PlayHealSound();
             if (Health < 5) 
             {
                 Health++;
@@ -245,5 +249,30 @@ public class PlayerController : MonoBehaviour
                 other.gameObject.tag = "Untagged";
             }
         }
+    }
+
+
+    /// <summary> Plays a stepping sound. </summary>
+    void PlayStepSound()
+    {
+        audioController.Play("Step", 0.5f);
+    }
+
+    /// <summary> Plays a damage taking sound. </summary>
+    void PlayDamageSound()
+    {
+        audioController.Play("TakeDamage", 0.3f);
+    }
+
+    /// <summary> Plays a healing sound. </summary>
+    void PlayHealSound()
+    {
+        audioController.Play("Heal");
+    }
+
+    /// <summary> Plays the jumping on enemy sound. </summary>
+    void PlayEnemyDamageSound()
+    {
+        audioController.Play("EnemyDamage", 0.3f);
     }
 }
