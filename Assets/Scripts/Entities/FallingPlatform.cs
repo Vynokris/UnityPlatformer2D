@@ -91,7 +91,7 @@ public class FallingPlatform : MonoBehaviour
         if (other.gameObject.tag == "Player")
             touchedByPlayer = true;
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") && falling == true)
             Hide();
     }
 }

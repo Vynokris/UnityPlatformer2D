@@ -11,10 +11,15 @@ public class GameController : MonoBehaviour
     [HideInInspector] public UnityEvent playerDamaged;
     [HideInInspector] public UnityEvent playerDied;
     [HideInInspector] public UnityEvent reloadScene;
+    [HideInInspector] public UnityEvent gameEnded;
+
+    public static bool     isGameFinished { get; private set; } = false;
+    public static float    gameTimer      { get; private set; } = 0f;
+    public static int      respawnCount   { get; private set; } = 0;
 
     private bool     transitionOpening  = true;
-    private bool     promptRestart      = true;
     private float    transitionMaxScale = 14;
+
     private Animator transitionAnimator;
     public  Cooldown transitionTimer { get; private set; } = new Cooldown(1f);
 
@@ -24,8 +29,10 @@ public class GameController : MonoBehaviour
         if (playerDamaged == null) playerDamaged = new UnityEvent();
         if (playerDied    == null) playerDied    = new UnityEvent();
         if (reloadScene   == null) reloadScene   = new UnityEvent();
+        if (gameEnded     == null) gameEnded     = new UnityEvent();
 
         playerDied.AddListener(StartTransition);
+        gameEnded .AddListener(OnGameEnd);
 
         if (galaxyTransition != null) transitionAnimator = galaxyTransition.GetComponent<Animator>();
         if (transitionDuration > 0)   transitionTimer.ChangeDuration(transitionDuration);
@@ -33,25 +40,18 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+        if (!isGameFinished)
+            gameTimer += Time.deltaTime;
         transitionTimer.Update(Time.deltaTime);
 
         // At the end of the transition, reload the scene.
         if (transitionTimer.HasEnded())
         {
             if (!transitionOpening)
-            {
-                if (promptRestart) {
-                    if (Input.GetKeyDown(KeyCode.Space))
-                        ReloadScene();
-                }
-                else {
-                    ReloadScene();
-                }
-            }
+                ReloadScene();
+
             else
-            {
                 galaxyTransition.transform.localScale = new Vector2(0, 0);
-            }
         }
 
         // Update the galaxy's scale.
@@ -67,8 +67,13 @@ public class GameController : MonoBehaviour
         // If the user pressed R, reload the scene.
         if (Input.GetKeyDown(KeyCode.R) && transitionTimer.HasEnded())
         {
+            if (isGameFinished)
+            {
+                PlayerController.spawnPos = new Vector2(0, 0);
+                gameTimer = 0f;
+                respawnCount = 0;
+            }
             StartTransition();
-            promptRestart = false;
             reloadScene.Invoke();
         }
 
@@ -79,17 +84,23 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Start the scene closing transition.
+    /// <summary> Start the scene closing transition. </summary>
     void StartTransition()
     {
-        promptRestart = true;
         transitionOpening = false;
         transitionTimer.Reset();
     }
 
-    // Reload the game scene.
+    /// <summary> Reload the game scene. </summary>
     void ReloadScene()
     {
+        respawnCount++;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    /// <summary> Ends the game and enables the player to restart. </summary>
+    void OnGameEnd()
+    {
+        isGameFinished = true;
     }
 }

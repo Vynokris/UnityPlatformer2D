@@ -54,7 +54,8 @@ public class OrangeSlime : MonoBehaviour
         // Chase the player.
         if (!IsWallFwd() && IsGroundFwd() &&
             chaseCooldown.HasEnded() &&
-            Vector2.Distance(transform.position, playerTransform.position) <= detectionRadius) 
+            Mathf.Abs(transform.position.x - playerTransform.position.x) <= detectionRadius &&
+            Mathf.Abs(transform.position.y - playerTransform.position.y) <= 1f) 
         {
             walkDir = (playerTransform.position - transform.position).normalized.x;
             rigidBody.velocity = new Vector2(walkDir * walkSpeed * Time.deltaTime * targetFPS, rigidBody.velocity.y);

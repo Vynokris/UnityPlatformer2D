@@ -4,37 +4,40 @@ using UnityEngine;
 
 public class Boss : MonoBehaviour
 {
-    [SerializeField] private int   health           = 3;
+    [SerializeField] private int   health           = 5;
     [SerializeField] private float minShootCooldown = 1f;
     [SerializeField] private float maxShootCooldown = 2f;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject bossProjectilePrefab;
+    [SerializeField] private GameController gameController;
 
     private float    targetFPS     = 75;
-    private Cooldown shootCooldown = new Cooldown(2.5f);
+    private Cooldown shootCooldown = new Cooldown(1f);
     private Cooldown knockBackTime = new Cooldown(0.2f);
     private Vector2  knockBackDir  = new Vector2 (0, 0);
 
     private Rigidbody2D       rigidBody;
     private CapsuleCollider2D capsule;
+    private BoxCollider2D     boxTrigger;
     private Animator          animator;
 
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        capsule   = GetComponent<CapsuleCollider2D>();
-        animator  = GetComponent<Animator>();
+        rigidBody  = GetComponent<Rigidbody2D>();
+        capsule    = GetComponent<CapsuleCollider2D>();
+        boxTrigger = GetComponent<BoxCollider2D>();
+        animator   = GetComponent<Animator>();
     }
 
     void Update()
     {
         rigidBody.velocity = new Vector2(0, 0);
-        if (health <= 0)
-            animator.SetBool("Dead", true);
-
-        Flip();
-        Shoot();
-        KnockBack();
+        if (health > 0)
+        {
+            Flip();
+            Shoot();
+            KnockBack();
+        }
     }
 
 
@@ -82,6 +85,19 @@ public class Boss : MonoBehaviour
             rigidBody.velocity += knockBackDir * 0.2f * Time.deltaTime * targetFPS *  knockBackTime.CompletionRatio();
     }
 
+    /// <summary> Decreases the boss's health by 1. </summary>
+    void DecreaseHealth()
+    {
+        health--;
+        if (health <= 0) 
+        {
+            animator.SetBool("Dead", true);
+            capsule.enabled = false;
+            boxTrigger.enabled = false;
+            gameController.gameEnded.Invoke();
+        }
+    }
+
     /// <summary> Flips the boss so that it always faces towards the player. </summary>
     void Flip()
     {
@@ -112,8 +128,8 @@ public class Boss : MonoBehaviour
         {
             if (other.gameObject.GetComponent<Rigidbody2D>().velocity.y < -1f)
             {
-                health--;
-                StartKnockBack(new Vector2(-transform.localScale.x * 80, 0), 0.4f);
+                DecreaseHealth();
+                StartKnockBack(new Vector2(-transform.localScale.x * 100, 0), 0.4f);
             }
         }
     }
