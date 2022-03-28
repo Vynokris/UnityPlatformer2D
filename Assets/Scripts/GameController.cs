@@ -1,4 +1,4 @@
-using System.Threading;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -19,7 +19,7 @@ public class GameController : MonoBehaviour
     public static int      respawnCount   { get; private set; } = 0;
     public static bool     speedrunMode   { get; private set; } = false;
 
-    private bool     transitionOpening  = true;
+    private bool     transitionGrowing  = true;
     private float    transitionMaxScale = 14;
     private float    targetFPS          = 75;
 
@@ -28,6 +28,9 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        if (galaxyTransition != null) transitionAnimator = galaxyTransition.GetComponent<Animator>();
+        if (transitionDuration > 0)   transitionTimer.ChangeDuration(transitionDuration);
+
         if (playerHealed  == null) playerHealed  = new UnityEvent();
         if (playerDamaged == null) playerDamaged = new UnityEvent();
         if (playerDied    == null) playerDied    = new UnityEvent();
@@ -37,40 +40,58 @@ public class GameController : MonoBehaviour
         playerDied.AddListener(StartTransition);
         gameEnded .AddListener(OnGameEnd);
 
-        if (galaxyTransition != null) transitionAnimator = galaxyTransition.GetComponent<Animator>();
-        if (transitionDuration > 0)   transitionTimer.ChangeDuration(transitionDuration);
-
         Cursor.visible = false;
+        StartCoroutine(UpdateTransition());
     }
 
     void Update()
     {
-        // Update the timers.
-        if (!isGameFinished) {
+        if (!isGameFinished)
             gameTimer += Time.deltaTime;
-        }
-        transitionTimer.Update(Time.deltaTime);
 
-        // At the end of the transition, reload the scene.
-        if (transitionTimer.HasEnded())
+        HandleInputs();
+    }
+
+
+    /// <summary> Updates the galaxy transition and reloads the scene if necessary. </summary>
+    IEnumerator UpdateTransition()
+    {
+        while (true)
         {
-            if (!transitionOpening)
-                ReloadScene();
+            transitionTimer.Update(Time.deltaTime);
 
+            // At the end of the transition, reload the scene.
+            if (transitionTimer.HasEnded())
+            {
+                if (!transitionGrowing)
+                    ReloadScene();
+
+                else
+                    galaxyTransition.transform.localScale = new Vector2(0, 0);
+                
+                break;
+            }
+
+            // Update the galaxy's scale.
             else
-                galaxyTransition.transform.localScale = new Vector2(0, 0);
+            {
+                float completionRatio = transitionTimer.CompletionRatio() * transitionMaxScale;
+                if (!transitionGrowing)
+                    completionRatio = transitionMaxScale - completionRatio;
+                
+                galaxyTransition.transform.localScale = new Vector2(completionRatio, completionRatio);
+
+                yield return null;
+            }
         }
 
-        // Update the galaxy's scale.
-        else
-        {
-            float completionRatio = transitionTimer.CompletionRatio() * transitionMaxScale;
-            if (!transitionOpening)
-                completionRatio = transitionMaxScale - completionRatio;
-            
-            galaxyTransition.transform.localScale = new Vector2(completionRatio, completionRatio);
-        }
+        StopCoroutine(UpdateTransition());
+    }
 
+
+    /// <summary> Handle player inputs to reload the scene, toggle speedrun mode and quit the game. </summary>
+    void HandleInputs()
+    {
         // If the user pressed R, reload the scene.
         if (Input.GetKeyDown(KeyCode.R) && transitionTimer.HasEnded())
         {
@@ -80,7 +101,7 @@ public class GameController : MonoBehaviour
             reloadScene.Invoke();
         }
 
-        // If the user pressed Ctrl+Shift+S, activate speedrun mode.
+        // If the user pressed P, activate speedrun mode.
         if (Input.GetButtonDown("SpeedrunMode"))
         {
             speedrunMode = !speedrunMode;
@@ -97,11 +118,13 @@ public class GameController : MonoBehaviour
         }
     }
 
+
     /// <summary> Start the scene closing transition. </summary>
     void StartTransition()
     {
-        transitionOpening = false;
+        transitionGrowing = false;
         transitionTimer.Reset();
+        StartCoroutine(UpdateTransition());
     }
 
     /// <summary> Reload the game scene. </summary>
