@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
 
     private bool     transitionGrowing  = true;
     private float    transitionMaxScale = 14;
-    private float    targetFPS          = 75;
 
     private Animator transitionAnimator;
     public  Cooldown transitionTimer { get; private set; } = new Cooldown(1f);
@@ -93,7 +92,7 @@ public class GameController : MonoBehaviour
     void HandleInputs()
     {
         // If the user pressed R, reload the scene.
-        if (Input.GetKeyDown(KeyCode.R) && transitionTimer.HasEnded())
+        if (Input.GetButtonDown("Restart") && transitionTimer.HasEnded())
         {
             if (isGameFinished || speedrunMode)
                 ResetGame();

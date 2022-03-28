@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class BossProjectile : MonoBehaviour
 {
@@ -44,7 +43,12 @@ public class BossProjectile : MonoBehaviour
     void Fade()
     {
         despawnTimer.Update(Time.deltaTime);
+
+        // In URP you can't change the material color anymore, so this line is useless...
         objectRenderer.material.SetColor("_Color", new Color(1, 1, 1, despawnTimer.CompletionRatio()));
+        foreach (Transform light in transform)
+            light.gameObject.GetComponent<Light2D>().intensity = despawnTimer.CompletionRatio();
+
         if (despawnTimer.HasEnded())
             Destroy(this.gameObject);
     }
