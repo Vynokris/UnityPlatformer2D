@@ -17,7 +17,7 @@ public class FallingPlatform : MonoBehaviour
 
     private Rigidbody2D   rigidBody;
     private BoxCollider2D boxCollider;
-    private Renderer      renderer;
+    private Renderer      objectRenderer;
 
     void Start()
     {
@@ -29,9 +29,9 @@ public class FallingPlatform : MonoBehaviour
         originalPos = transform.position;
         originalRot = transform.rotation;
 
-        boxCollider = GetComponent<BoxCollider2D>();
-        rigidBody   = GetComponent<Rigidbody2D>();
-        renderer    = GetComponent<Renderer>();
+        boxCollider    = GetComponent<BoxCollider2D>();
+        rigidBody      = GetComponent<Rigidbody2D>();
+        objectRenderer = GetComponent<Renderer>();
     }
 
     void Update()
@@ -66,7 +66,7 @@ public class FallingPlatform : MonoBehaviour
         rigidBody.gravityScale = 0f;
         rigidBody.velocity = new Vector2(0, 0);
         rigidBody.angularVelocity = 0;
-        renderer.material.SetColor("_Color", new Color(1, 1, 1, 0));
+        objectRenderer.material.SetColor("_Color", new Color(1, 1, 1, 0));
     }
 
     /// <summary> Resets the platform to its original state and transform. </summary>
@@ -81,7 +81,7 @@ public class FallingPlatform : MonoBehaviour
         boxCollider.enabled    = true;
         fallCooldown.Reset();
         respawnCooldown.Reset();
-        renderer.material.SetColor("_Color", new Color(1, 1, 1, 1));
+        objectRenderer.material.SetColor("_Color", new Color(1, 1, 1, 1));
     }
 
 

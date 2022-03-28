@@ -95,6 +95,11 @@ public class Boss : MonoBehaviour
     void DecreaseHealth()
     {
         health--;
+
+        // Remap health to min and max shoot cooldowns.
+        minShootCooldown = 1 + (health - 5) * (0.4f - 1) / (-5);
+        maxShootCooldown = 2 + (health - 5) * (0.5f - 2) / (-5);
+
         if (health <= 0) 
         {
             animator.SetBool("Dead", true);

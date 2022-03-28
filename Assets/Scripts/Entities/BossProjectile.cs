@@ -13,16 +13,16 @@ public class BossProjectile : MonoBehaviour
 
     private Rigidbody2D       rigidBody;
     private CapsuleCollider2D capsule;
-    private Renderer          renderer;
+    private Renderer          objectRenderer;
 
     void Start()
     {
         if (timeToDespawn >= 0)
             despawnTimer.ChangeDuration(timeToDespawn);
 
-        rigidBody  = GetComponent<Rigidbody2D>();
-        capsule    = GetComponent<CapsuleCollider2D>();
-        renderer   = GetComponent<Renderer>();
+        rigidBody      = GetComponent<Rigidbody2D>();
+        capsule        = GetComponent<CapsuleCollider2D>();
+        objectRenderer = GetComponent<Renderer>();
     }
 
     void Update()
@@ -44,7 +44,7 @@ public class BossProjectile : MonoBehaviour
     void Fade()
     {
         despawnTimer.Update(Time.deltaTime);
-        renderer.material.SetColor("_Color", new Color(1, 1, 1, despawnTimer.CompletionRatio()));
+        objectRenderer.material.SetColor("_Color", new Color(1, 1, 1, despawnTimer.CompletionRatio()));
         if (despawnTimer.HasEnded())
             Destroy(this.gameObject);
     }

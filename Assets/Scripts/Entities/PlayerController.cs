@@ -87,13 +87,13 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("IsJumping", !jumpTime.Update(Time.deltaTime));
 
         // Initiate jump from the ground.
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space)) 
+        if (isGrounded && Input.GetButtonDown("Jump")) 
         {
             jumpTime.Reset();
         }
 
         // Buffer a jump while in the air.
-        if (!isGrounded && Input.GetKeyDown(KeyCode.Space))
+        if (!isGrounded && Input.GetButtonDown("Jump"))
         {
             jumpBufferTime.Reset();
         }
@@ -105,13 +105,13 @@ public class PlayerController : MonoBehaviour
         }
 
         // Initiate jump using coyote time.
-        if (!isGrounded && !coyoteTime.Update(Time.deltaTime) && Input.GetKeyDown(KeyCode.Space))
+        if (!isGrounded && !coyoteTime.Update(Time.deltaTime) && Input.GetButtonDown("Jump"))
         {
             jumpTime.Reset();
         }
 
         // Continue jump in the air & end after duration.
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetButton("Jump"))
         {
             if (!jumpTime.HasEnded())
             {
@@ -120,7 +120,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // End jump prematurely.
-        if (Input.GetKeyUp(KeyCode.Space)) 
+        if (Input.GetButtonUp("Jump")) 
         {
             jumpTime.Counter = 0;
         }

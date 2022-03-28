@@ -1,6 +1,7 @@
+using System.Threading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -16,9 +17,11 @@ public class GameController : MonoBehaviour
     public static bool     isGameFinished { get; private set; } = false;
     public static float    gameTimer      { get; private set; } = 0f;
     public static int      respawnCount   { get; private set; } = 0;
+    public static bool     speedrunMode   { get; private set; } = false;
 
     private bool     transitionOpening  = true;
     private float    transitionMaxScale = 14;
+    private float    targetFPS          = 75;
 
     private Animator transitionAnimator;
     public  Cooldown transitionTimer { get; private set; } = new Cooldown(1f);
@@ -42,8 +45,10 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (!isGameFinished)
+        // Update the timers.
+        if (!isGameFinished) {
             gameTimer += Time.deltaTime;
+        }
         transitionTimer.Update(Time.deltaTime);
 
         // At the end of the transition, reload the scene.
@@ -69,8 +74,18 @@ public class GameController : MonoBehaviour
         // If the user pressed R, reload the scene.
         if (Input.GetKeyDown(KeyCode.R) && transitionTimer.HasEnded())
         {
-            if (isGameFinished)
+            if (isGameFinished || speedrunMode)
                 ResetGame();
+            StartTransition();
+            reloadScene.Invoke();
+        }
+
+        // If the user pressed Ctrl+Shift+S, activate speedrun mode.
+        if (Input.GetButtonDown("SpeedrunMode"))
+        {
+            speedrunMode = !speedrunMode;
+            PlayerController.spawnPos = new Vector2(0, 0);
+            ResetGame();
             StartTransition();
             reloadScene.Invoke();
         }
@@ -108,5 +123,6 @@ public class GameController : MonoBehaviour
         PlayerController.spawnPos = new Vector2(0, 0);
         gameTimer = 0f;
         respawnCount = 0;
+        isGameFinished = false;
     }
 }
