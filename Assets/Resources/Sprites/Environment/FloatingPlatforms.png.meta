@@ -1,3 +1,549 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:ce63276c8cbf1425c7318cd4f676931ac8b0c07305f69e13f2763a5f03ff7632
-size 13190
+fileFormatVersion: 2
+guid: a22bfa66f9460184e85dff58f58a52a5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -3749178153890306407
+    second: FloatingPlatforms_0
+  - first:
+      213: 238155886522197284
+    second: FloatingPlatforms_1
+  - first:
+      213: 4248929266890769294
+    second: FloatingPlatforms_2
+  - first:
+      213: 3147543639848633563
+    second: FloatingPlatforms_3
+  - first:
+      213: -946189306147182392
+    second: FloatingPlatforms_4
+  - first:
+      213: -6570539400273935114
+    second: FloatingPlatforms_5
+  - first:
+      213: -3033937605381580045
+    second: FloatingPlatforms_6
+  - first:
+      213: 3624038497557158508
+    second: FloatingPlatforms_7
+  - first:
+      213: 7538244195671414159
+    second: FloatingPlatforms_8
+  - first:
+      213: -4217093497584216699
+    second: FloatingPlatforms_9
+  - first:
+      213: 1656947718055265749
+    second: FloatingPlatforms_10
+  - first:
+      213: -433192948440887994
+    second: FloatingPlatforms_11
+  - first:
+      213: -4414215062789140354
+    second: FloatingPlatforms_12
+  - first:
+      213: 5762075778745275775
+    second: FloatingPlatforms_13
+  - first:
+      213: -1959137386451652751
+    second: FloatingPlatforms_14
+  - first:
+      213: 6860388541008272772
+    second: FloatingPlatforms_15
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 512
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: FloatingPlatforms_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -80, y: 98}
+        - {x: -81, y: -79}
+        - {x: 5, y: -130}
+        - {x: 86, y: -75}
+        - {x: 88, y: 100}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 996a6b1455e38fbc0800000000000000
+      internalID: -3749178153890306407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_1
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -128, y: 143}
+        - {x: -128, y: -135}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 425e25954891e4300800000000000000
+      internalID: 238155886522197284
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 144, y: -131}
+        - {x: 144, y: 146}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e8309cc08aa37fa30800000000000000
+      internalID: 4248929266890769294
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1536
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd4c73893425eab20800000000000000
+      internalID: 3147543639848633563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -131, y: 114}
+        - {x: -135, y: -113}
+        - {x: 116, y: -114}
+        - {x: 117, y: 111}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c8e2d4d6d57ed2f0800000000000000
+      internalID: -946189306147182392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_5
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -128, y: 143}
+        - {x: -128, y: -135}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f4c6f74a31c0d4a0800000000000000
+      internalID: -6570539400273935114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_6
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 144, y: -131}
+        - {x: 144, y: 146}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3fa188882d945e5d0800000000000000
+      internalID: -3033937605381580045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_7
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 1024
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6a1c3300db2b4230800000000000000
+      internalID: 3624038497557158508
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -111, y: -93}
+        - {x: -113, y: -224}
+        - {x: 86, y: -226}
+        - {x: 87, y: -93}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f85152918293d9860800000000000000
+      internalID: 7538244195671414159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_9
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -124, y: 144}
+        - {x: -124, y: -134}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 58512eb9ecfd975c0800000000000000
+      internalID: -4217093497584216699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_10
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d50412bb29aef610800000000000000
+      internalID: 1656947718055265749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_11
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 136, y: -134}
+        - {x: 136, y: 143}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64d0afcfe4dfcf9f0800000000000000
+      internalID: -433192948440887994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -131, y: 144}
+        - {x: -131, y: -134}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: e705644b9ce8db2c0800000000000000
+      internalID: -4414215062789140354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_13
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f759ef8546107ff40800000000000000
+      internalID: 5762075778745275775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_14
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 256, y: -133}
+        - {x: 256, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 17fac5e4deebfc4e0800000000000000
+      internalID: -1959137386451652751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FloatingPlatforms_15
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -256, y: 145}
+        - {x: -256, y: -133}
+        - {x: 131, y: -133}
+        - {x: 131, y: 144}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 48d55f7b70ff43f50800000000000000
+      internalID: 6860388541008272772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: c6e9d827eef44934c86778652ddb170a
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
