@@ -25,7 +25,9 @@ The goal was to create a 2D platformer game in C# using Unity Engine.
     - Has 5 health points
     - Takes damage and gets knocked back when touched by an enemy
     - Can jump on enemies to damage them <br>
+    
 <br>
+
 - Enemies
     - Green slime
         - Has 1 health point
@@ -38,7 +40,9 @@ The goal was to create a 2D platformer game in C# using Unity Engine.
         - Shoots arrows in the player's direction
         - Has 5 health points
         - Gets knocked back when damaged <br>
+        
 <br>
+
 - Environment
     - Spiky vines
     - Bouncy plants
