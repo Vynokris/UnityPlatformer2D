@@ -3,7 +3,8 @@
 ### General Information
 
 This project was made for the ISART Digital school by Rémi Serra. <br>
-The goal was to create a 2D platformer game in C# using Unity Engine.
+The goal was to create a 2D platformer game in C# using Unity Engine. <br>
+Most assets come from this pack: [Mossy Cavern](https://maaot.itch.io/mossy-cavern).
 
 <br>
 
